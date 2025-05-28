@@ -59,3 +59,7 @@ I ran a lot of experiments with different image input sizes and epochs to find t
 
 The resnets performeance was not very good, and resulted in a Kaggle score of around 0.86. I then tried the ConvNext Small 22k and found that it performed much better than the resnet models, with a score of around 0.92.
 
+After researching the topic, I found a paper called "Fighting deepfake by exposing the convolutional traces on images" (Guarnera et al., 2020) that suggested using a technique were you calculate convolution traces of the images, by using a algorithm called Expectation Maximization (EM). A simple implementation of this algorithm was tested, and by using the Random Forest classifier, as recommended in the paper, I managed to get a score of around 0.95 on Kaggle.
+
+
+Guarnera, L., Giudice, O., & Battiato, S. (2020). Fighting deepfake by exposing the convolutional traces on images. IEEE access, 8, 165085-165098.
