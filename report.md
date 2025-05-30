@@ -68,11 +68,31 @@ In terms of other augmentations, I used Fast AI's standard augmentations which i
 
 In this task, we will create a model to detect deepfake images using a dataset of real and fake images. Similar to the paddy disease detection task, we will leverage transfer learning and fine-tune a pre-trained model for this purpose.
 
-I started by looking at the dataset and applied the same preprocessing steps as in the paddy disease detection task. I used the resnet50 architecture with few epochs, which makes training very fast. It was then possible to quickly iterate on the process in terms of augmentations and hyperparameter tuning. I ran a lot of experiments with different image input sizes and epochs to find the best resnet model. I started with 512x512 before testing 256x256 and finally 128x128. I found that the smaller the image size, the better the model performed, but when the images becomes too small they loose the subtle errors and noise that distinguish the real from the fake iamges. The resnet50s performance was satisfactory, but not very good, and resulted in a Kaggle score of around 0.895.
+### Initial Experiments: ResNet50 Baseline
+I began by analyzing the dataset and applied similar preprocessing techniques as used in the paddy project. For our baseline, I selected the ResNet50 architecture due to its proven performance and fast training capabilities, especially in early prototyping. By keeping the number of training epochs low, I could quickly iterate over various configurations of image size, augmentations, and learning rates.
 
-I then explored other architectures such as ConvNext and ViT to see if those worked better on this challenge. 
+To determine the optimal input resolution, I conducted experiments with image sizes of 512×512, 256×256, and 128×128. Surprisingly, I observed that smaller image sizes often yielded better performance, likely due to the model’s improved ability to generalize. However, reducing the resolution too much caused the model to miss subtle artifacts and imperfections characteristic of deepfakes. Ultimately, the 256×256 resolution struck a balance between detail and generalization, producing the best results for ResNet50. This model achieved a Kaggle score of approximately 0.895, which served as a strong baseline.
 
-Similarly to the paddy disease task, creating an ensemble of different architectures should improve the final model as it hedges on the models good qualities.
+| epoch | train_loss | valid_loss | error_rate | time  |
+|-------|------------|------------|------------|-------|
+| 0     | 0.193611   | 0.365707   | 0.112774   | 03:11 |
+| 1     | 0.155723   | 0.326862   | 0.102295   | 03:11 |
+| 2     | 0.125915   | 0.298038   | 0.095060   | 03:14 |
+| 3     | 0.133721   | 0.297405   | 0.100882   | 03:19 |
+
+![Confusion matrix for resnet50](media/resnet50_cm.png)
+
+### Testing Alternative Architectures
+I then explored other architectures such as ConvNeXt Small and Vision Transformers (ViT), hypothesizing that their ability to model local textures could offer an advantage in detecting subtle deepfake imperfections. Multiple configurations were tested, including different patch sizes and training schedules.
+
+Although the ConvNeXt Small model performed comparably well, reaching a score of 0.889, it required significantly more computational resources and longer training time without offering a meaningful improvement. Similarly, ViT models showed promise but consistently fell short of outperforming ResNet50. These results suggest that for this particular task, ResNet50 strikes a favorable tradeoff between accuracy, training speed, and generalization.
+
+### Ensemble Strategy
+As in the paddy disease detection task, I attempted to ensemble multiple models with ResNet50, ConvNeXt Small, and ViT variants—to combine their strengths. Ensembling is generally expected to reduce variance and leverage complementary decision boundaries, leading to improved performance.
+
+However, in this case, the ensemble approach did not lead to an improvement over the best single ResNet50 model. The averaged predictions showed minor fluctuations in accuracy and even underperformed slightly compared to the standalone ResNet50. Several factors may explain this; Firstly, rhe individual models may have learned similar decision boundaries, reducing the benefit of ensembling. Secondly, averaging softmax probabilities across models with different confidence levels might have introduced noise. And lastly, models like ViT and ConvNeXt, though powerful, might fail to pick up on the exact set of features critical for this task, weakening the ensemble’s consensus.
+
+### Other methods from the literature
 
 After researching the topic, I found a paper called "Fighting deepfake by exposing the convolutional traces on images" (Guarnera et al., 2020) that suggested using a technique were you calculate convolution traces of the images, by using a algorithm called Expectation Maximization (EM). The method works by calculating the convolution traces of the images, which are the tiny patterns, imperfections and artifacts left behind by the GANs (Generative Adversarial Networks) that create deepfakes. These traces are often too subtle for the human eye to detect, but they can be captured by the EM algorithm. The EM algorithm iteratively refines the estimates of the convolution traces until they converge to a stable solution. Once the traces are calculated, they can be used as features for a classifier, such as Random Forest, to distinguish between real and fake images. A simple implementation of this algorithm was tested, and by using the Random Forest classifier, as recommended in the paper, I managed to get a accuracy of around 0.6, which is not particularly good. I therefore tried to use Support Vector Classification (SVC) as an alternative to Random Forest classifier. This increased the accuracy to 0.7, and shows that the method works, as the computed convolution traces have some signal, but they are noisy and hard to classify. In the paper, they get an even higher accuracy at around 0.9 and above, which tells me that my implementation of the paper might not be as good as theirs, and without GPU acceleration of the convolution trace computation it takes many hours to finish the dataset. 
 
