@@ -80,7 +80,7 @@ To determine the optimal input resolution, I conducted experiments with image si
 | 2     | 0.125915   | 0.298038   | 0.095060   | 03:14 |
 | 3     | 0.133721   | 0.297405   | 0.100882   | 03:19 |
 
-![Confusion matrix for resnet50](media/resnet50_cm.png)
+![Confusion matrix for resnet50](images/resnet50_cm.png)
 
 ### Testing Alternative Architectures
 I then explored other architectures such as ConvNeXt Small and Vision Transformers (ViT), hypothesizing that their ability to model local textures could offer an advantage in detecting subtle deepfake imperfections. Multiple configurations were tested, including different patch sizes and training schedules.
