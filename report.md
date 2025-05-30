@@ -98,4 +98,12 @@ After researching the topic, I found a paper called "Fighting deepfake by exposi
 
 Looking at this solution it is quite nice to see that the task is solvable without needing a black box, which these CNNs and RNNs are, and it is possible to explain how the model made its prediction on a understandable level. Making an understandable model will be important to be able to gain trust in the model and will supersede any deep learning model with equal accuracy.
 
+Another paper titled "Deepfake Detection and Classification of Images from Video: A Review of Features, Techniques, and Challenges" (Bale, et al. 2024), gives a structured review of how deepfake images, especially those extracted from video, are detected and classified and it outlines three main approaches.
+
+Feature-based methods rely on spotting visual inconsistencies like unnatural lighting, irregular eye reflections, or distorted facial expressions. Traditional machine learning models use predefined features to train classifiers, but they often struggle to adapt to new types of deepfakes. Deep learning techniques, and especially convolutional neural networks (CNNs) are more robust, as they can learn complex features and adapt to small manipulations.
+
+The paper points out several ongoing challenges in the field, such as the rapid evolution of deepfake creation tools, the limited availability of diverse and representative datasets, and the difficulty of building models that perform well across different scenarios. To address these, the authors propose a framework for comparing detection techniques and stress the importance of real-world applicability, model robustness, and future research aimed at staying ahead of increasingly realistic forgeries.
+
 Guarnera, L., Giudice, O., & Battiato, S. (2020). Fighting deepfake by exposing the convolutional traces on images. IEEE access, 8, 165085-165098.
+
+Bale, D. L. T., Ochei, L. C., & Ugwu, C. (2024). Deepfake Detection and Classification of Images from Video: A Review of Features, Techniques, and Challenges. International Journal of Intelligent Information Systems, 13(2), 17–27. https://doi.org/10.11648/j.ijiis.20241302.11
